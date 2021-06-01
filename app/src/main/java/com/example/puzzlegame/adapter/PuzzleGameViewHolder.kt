@@ -14,10 +14,8 @@ class PuzzleGameViewHolder(private val binding: RowItemBinding) :
 
         if (item.isOpen) {
             binding.imageItem.setImageResource(item.imagePath)
-            binding.root.isEnabled = false
         } else {
             binding.imageItem.setImageResource(R.drawable.image_background)
-            binding.root.isEnabled = true
         }
 
         binding.root.setOnClickListener {

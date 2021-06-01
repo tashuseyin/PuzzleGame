@@ -19,7 +19,6 @@ class GameFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private val cardList = ArrayList<CardModel>()
-    private val tempCardList = ArrayList<Int>()
     private lateinit var adapter: PuzzleGameAdapter
     private var score = 0
 
@@ -42,36 +41,36 @@ class GameFragment : Fragment() {
 
 
         adapter = PuzzleGameAdapter { position ->
-
             if ((score >= 0 || score < 10)) {
-                tempCardList.add(position)
-                cardList[position].isOpen = true
 
-                Handler(Looper.getMainLooper()).postDelayed({
-                    if (tempCardList.size == 2) {
-                        if (cardList[tempCardList[0]].id == cardList[tempCardList[1]].id) {
-                            cardList[tempCardList[0]].isOpen = true
-                            cardList[tempCardList[0]].isImagesMatched = true
-                            cardList[tempCardList[1]].isOpen = true
-                            cardList[tempCardList[1]].isImagesMatched = true
-                            score += 1
-                            if (score == 10){
-                                val scoreFragment = ScoreFragment()
-                                activity?.supportFragmentManager?.beginTransaction()
-                                    ?.replace(R.id.fragment, scoreFragment)?.commit()
+                if (!(cardList[position].isOpen && cardList[position].isImagesMatched)){
+                    val indexList = cardList
+                        .filter { (it.isOpen || (it.id == cardList[position].id)) && !it.isImagesMatched }
+                        .map { cardList.indexOf(it) }
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        if (indexList.size == 2) {
+                            if (cardList[indexList[0]].imagePath == cardList[indexList[1]].imagePath) {
+                                cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = true, isImagesMatched = true)
+                                cardList[indexList[1]] = cardList[indexList[1]].copy(isOpen = true, isImagesMatched = true)
+                                score += 1
+                                if (score == 10) {
+                                    val scoreFragment = ScoreFragment()
+                                    activity?.supportFragmentManager?.beginTransaction()
+                                        ?.replace(R.id.fragment, scoreFragment)?.commit()
+                                }
+                            } else {
+                                cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = false, isImagesMatched = false)
+                                cardList[indexList[1]] = cardList[indexList[1]].copy(isOpen = false, isImagesMatched = false)
                             }
                         } else {
-                            cardList[tempCardList[0]].isOpen = false
-                            cardList[tempCardList[0]].isImagesMatched = false
-                            cardList[tempCardList[1]].isOpen = false
-                            cardList[tempCardList[1]].isImagesMatched = false
+                            cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = true, isImagesMatched = false)
                         }
-                        tempCardList.clear()
-                    }
-                }, 10)
+                    }, 10)
+                    adapter.submitList(cardList.toList())
+                }
 
-                adapter.submitList(null)
-                adapter.submitList(cardList)
+
             }
         }
 
@@ -97,16 +96,16 @@ class GameFragment : Fragment() {
             add(CardModel(8, R.drawable.memati))
             add(CardModel(9, R.drawable.suleyman))
             add(CardModel(10, R.drawable.ziya))
-            add(CardModel(1, R.drawable.polat))
-            add(CardModel(2, R.drawable.abdulhey))
-            add(CardModel(3, R.drawable.aslan))
-            add(CardModel(4, R.drawable.duran))
-            add(CardModel(5, R.drawable.elif))
-            add(CardModel(6, R.drawable.erhan))
-            add(CardModel(7, R.drawable.mehmet))
-            add(CardModel(8, R.drawable.memati))
-            add(CardModel(9, R.drawable.suleyman))
-            add(CardModel(10, R.drawable.ziya))
+            add(CardModel(11, R.drawable.polat))
+            add(CardModel(12, R.drawable.abdulhey))
+            add(CardModel(13, R.drawable.aslan))
+            add(CardModel(14, R.drawable.duran))
+            add(CardModel(15, R.drawable.elif))
+            add(CardModel(16, R.drawable.erhan))
+            add(CardModel(17, R.drawable.mehmet))
+            add(CardModel(18, R.drawable.memati))
+            add(CardModel(19, R.drawable.suleyman))
+            add(CardModel(20, R.drawable.ziya))
         }
         cardList.shuffle()
 

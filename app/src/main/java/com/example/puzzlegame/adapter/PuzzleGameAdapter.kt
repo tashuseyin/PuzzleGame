@@ -25,7 +25,7 @@ class PuzzleGameAdapter(
 
     class DiffCallback : DiffUtil.ItemCallback<CardModel>() {
         override fun areItemsTheSame(oldItem: CardModel, newItem: CardModel): Boolean {
-            return oldItem.isOpen == newItem.isOpen
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: CardModel, newItem: CardModel): Boolean {
