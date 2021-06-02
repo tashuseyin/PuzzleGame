@@ -68,9 +68,9 @@ class GameFragment : Fragment() {
                                     )
                                     score += 1
                                     if (score == 10) {
-                                        val gameFragment = GameFragment()
+                                        val scoreFragment = ScoreFragment()
                                         activity?.supportFragmentManager?.beginTransaction()
-                                            ?.replace(R.id.fragment, gameFragment)?.commit()
+                                            ?.replace(R.id.fragment, scoreFragment)?.commit()
                                     }
                                 } else {
                                     cardList[indexList[0]] = cardList[indexList[0]].copy(
