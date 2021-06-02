@@ -42,7 +42,6 @@ class GameFragment : Fragment() {
 
 
         adapter = PuzzleGameAdapter { position ->
-
             if (!isGameStarted) {
                 cardList[position] = cardList[position].copy(isOpen = true)
                 adapter.submitList(null)
@@ -51,6 +50,7 @@ class GameFragment : Fragment() {
             } else {
                 if ((score >= 0 || score < 10)) {
                     if (!(cardList[position].isOpen && cardList[position].isImagesMatched)) {
+                        cardList[position] = cardList[position].copy(isOpen = true)
                         val indexList = cardList
                             .filter { (it.isOpen || (it.id == cardList[position].id)) && !it.isImagesMatched }
                             .map { cardList.indexOf(it) }
@@ -68,9 +68,9 @@ class GameFragment : Fragment() {
                                     )
                                     score += 1
                                     if (score == 10) {
-                                        val scoreFragment = ScoreFragment()
+                                        val gameFragment = GameFragment()
                                         activity?.supportFragmentManager?.beginTransaction()
-                                            ?.replace(R.id.fragment, scoreFragment)?.commit()
+                                            ?.replace(R.id.fragment, gameFragment)?.commit()
                                     }
                                 } else {
                                     cardList[indexList[0]] = cardList[indexList[0]].copy(
@@ -92,10 +92,8 @@ class GameFragment : Fragment() {
                         adapter.submitList(cardList.toList())
                     }
                 }
-
             }
         }
-
         initContent()
 
         adapter.submitList(cardList)
