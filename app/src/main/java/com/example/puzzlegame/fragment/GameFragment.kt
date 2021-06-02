@@ -23,6 +23,7 @@ class GameFragment : Fragment() {
     private var score = 0
     private var isGameStarted: Boolean = false
 
+
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
 
@@ -39,6 +40,7 @@ class GameFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         recyclerView = binding.recyclerView
+
 
 
         adapter = PuzzleGameAdapter { position ->
