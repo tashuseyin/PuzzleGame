@@ -21,6 +21,7 @@ class GameFragment : Fragment() {
     private val cardList = ArrayList<CardModel>()
     private lateinit var adapter: PuzzleGameAdapter
     private var score = 0
+    private var isGameStarted: Boolean = false
 
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
@@ -41,36 +42,58 @@ class GameFragment : Fragment() {
 
 
         adapter = PuzzleGameAdapter { position ->
-            if ((score >= 0 || score < 10)) {
-                if (!(cardList[position].isOpen && cardList[position].isImagesMatched)) {
-                    cardList[position] = cardList[position].copy(isOpen = true)
-                    val indexList = cardList
-                        .filter { (it.isOpen || (it.id == cardList[position].id)) && !it.isImagesMatched }
-                        .map { cardList.indexOf(it) }
 
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        if (indexList.size == 2) {
-                            if (cardList[indexList[0]].imagePath == cardList[indexList[1]].imagePath) {
-                                cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = true, isImagesMatched = true)
-                                cardList[indexList[1]] = cardList[indexList[1]].copy(isOpen = true, isImagesMatched = true)
-                                score += 1
-                                if (score == 10) {
-                                    val scoreFragment = ScoreFragment()
-                                    activity?.supportFragmentManager?.beginTransaction()
-                                        ?.replace(R.id.fragment, scoreFragment)?.commit()
+            if (!isGameStarted) {
+                cardList[position] = cardList[position].copy(isOpen = true)
+                adapter.submitList(null)
+                adapter.submitList(cardList.toList())
+                isGameStarted = true
+            } else {
+                if ((score >= 0 || score < 10)) {
+                    if (!(cardList[position].isOpen && cardList[position].isImagesMatched)) {
+                        val indexList = cardList
+                            .filter { (it.isOpen || (it.id == cardList[position].id)) && !it.isImagesMatched }
+                            .map { cardList.indexOf(it) }
+
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            if (indexList.size == 2) {
+                                if (cardList[indexList[0]].imagePath == cardList[indexList[1]].imagePath) {
+                                    cardList[indexList[0]] = cardList[indexList[0]].copy(
+                                        isOpen = true,
+                                        isImagesMatched = true
+                                    )
+                                    cardList[indexList[1]] = cardList[indexList[1]].copy(
+                                        isOpen = true,
+                                        isImagesMatched = true
+                                    )
+                                    score += 1
+                                    if (score == 10) {
+                                        val scoreFragment = ScoreFragment()
+                                        activity?.supportFragmentManager?.beginTransaction()
+                                            ?.replace(R.id.fragment, scoreFragment)?.commit()
+                                    }
+                                } else {
+                                    cardList[indexList[0]] = cardList[indexList[0]].copy(
+                                        isOpen = false,
+                                        isImagesMatched = false
+                                    )
+                                    cardList[indexList[1]] = cardList[indexList[1]].copy(
+                                        isOpen = false,
+                                        isImagesMatched = false
+                                    )
                                 }
                             } else {
-                                cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = false, isImagesMatched = false)
-                                cardList[indexList[1]] = cardList[indexList[1]].copy(isOpen = false, isImagesMatched = false)
+                                cardList[indexList[0]] = cardList[indexList[0]].copy(
+                                    isOpen = true,
+                                    isImagesMatched = false
+                                )
                             }
-                        } else {
-                            cardList[indexList[0]] = cardList[indexList[0]].copy(isOpen = true, isImagesMatched = false)
-                        }
-                    }, 10)
-                    adapter.submitList(cardList.toList())
+                        }, 10)
+                        adapter.submitList(cardList.toList())
+                    }
                 }
-            }
 
+            }
         }
 
         initContent()
