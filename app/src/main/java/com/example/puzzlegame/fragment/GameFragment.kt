@@ -96,6 +96,7 @@ class GameFragment : Fragment() {
                 }
             }
         }
+
         initContent()
 
         adapter.submitList(cardList)

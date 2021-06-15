@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:background="@color/purple_500"
     tools:context=".fragment.ScoreFragment">
 
@@ -12,8 +13,7 @@
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/restartButton"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="300dp"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:lottie_rawRes="@raw/restartbutton" />

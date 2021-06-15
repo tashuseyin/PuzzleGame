@@ -21,8 +21,6 @@ class PuzzleGameViewHolder(private val binding: RowItemBinding) :
         binding.root.setOnClickListener {
             if (RecyclerView.NO_POSITION != adapterPosition)
                 onItemClickListener(adapterPosition)
-
-
         }
     }
 
